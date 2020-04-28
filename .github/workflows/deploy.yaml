@@ -21,7 +21,7 @@ jobs:
           SqlLocalDB start MSSQLLocalDB
           SqlLocalDB info MSSQLLocalDB                    
           sqlcmd -S "(localdb)\MSSQLLocalDB" -i database.sql
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Use PHP7CrudExample; Select * from items;"
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Use PHP7CrudExample; Select * from DBO.items;"
 
       - name: Install dependencies
         run: composer install
