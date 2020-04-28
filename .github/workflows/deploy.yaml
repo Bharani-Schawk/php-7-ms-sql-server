@@ -1,0 +1,16 @@
+name: Deploy workflow
+on: [push, pull_request]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ SECRETS.host }}
+          username: ${{ SECRETS.username }}
+          key: ${{ SECRETS.sshkey }}
+          script: |
+            cd /var/www/sqlapp
+            sudo git pull -f https://Bharani-Schawk:${{ SECRETS.GITHUB_TOKEN }}@github.com/Bharani-Schawk/php-7-ms-sql-server.git HEAD:master
+            sudo git log

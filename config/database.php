@@ -6,10 +6,10 @@ $capsule = new Capsule();
 
 $capsule->addConnection([
     'driver'    => 'sqlsrv',
-    'host'      => 'localhost',
+    'host'      => '(localdb)\MSSQLLocalDB',
     'database'  => 'PHP7CrudExample',
-    'username'  => 'kr',
-    'password'  => 'aise',
+    'username'  => '',
+    'password'  => '',
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',
