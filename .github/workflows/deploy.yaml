@@ -2,7 +2,7 @@ name: Deploy workflow
 on: [push, pull_request]
 jobs:
   tests:
-    name: tests
+    name: Setup PHP, UNIT TESTS, SQL SERVER & TEST SQL
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -11,7 +11,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.3'
+          php-version: "7.3"
           tools: phpunit, phpstan
           extensions: json, mbstring, sqlsrv, pdo_sqlsrv, xdebug
 
@@ -21,7 +21,7 @@ jobs:
           SqlLocalDB start MSSQLLocalDB
           SqlLocalDB info MSSQLLocalDB                    
           sqlcmd -S "(localdb)\MSSQLLocalDB" -i database.sql          
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Select * from [PHP7CrudExample].[dbo].[items];"
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Select * from [TestingCICD].[dbo].[items];"
 
       - name: Install dependencies
         run: composer install
@@ -29,14 +29,14 @@ jobs:
       - name: Unit test
         continue-on-error: true
         env:
-          DB_DSN: 'sqlserver://@(localdb)\MSSQLLocalDB/PHP7CrudExample'
+          DB_DSN: 'sqlserver://@(localdb)\MSSQLLocalDB/TestingCICD'
         run: |
           phpunit --coverage-text
 
       - name: Static Analysis
         continue-on-error: true
         run: |
-          phpstan analyse --no-progress app          
+          phpstan analyse --no-progress app
   deploy:
     runs-on: ubuntu-latest
     needs: tests

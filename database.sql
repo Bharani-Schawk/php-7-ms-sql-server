@@ -1,7 +1,7 @@
-CREATE DATABASE PHP7CrudExample
+CREATE DATABASE TestingCICD
 GO
 
-USE PHP7CrudExample
+USE TestingCICD
 GO
 
 CREATE TABLE [items](
