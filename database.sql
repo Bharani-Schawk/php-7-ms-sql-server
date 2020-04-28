@@ -1,6 +1,9 @@
 CREATE DATABASE PHP7CrudExample
 GO
 
+USE PHP7CrudExample
+GO
+
 CREATE TABLE [items](
     [id] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
     [item] [nvarchar](50) NULL,
