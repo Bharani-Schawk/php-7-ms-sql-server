@@ -15,11 +15,21 @@ jobs:
           tools: phpunit, phpstan
           extensions: json, mbstring, sqlsrv, pdo_sqlsrv, xdebug
 
+      - name: Setup DB
+        run: |
+          SqlLocalDB create MSSQLLocalDB
+          SqlLocalDB start MSSQLLocalDB
+          SqlLocalDB info MSSQLLocalDB                    
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -i database.sql
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Use PHP7CrudExample; Select * from items;"
+
       - name: Install dependencies
         run: composer install
 
       - name: Unit test
         continue-on-error: true
+        env:
+          DB_DSN: 'sqlserver://@(localdb)\MSSQLLocalDB/PHP7CrudExample'
         run: |
           phpunit --coverage-text
 
