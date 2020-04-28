@@ -16,7 +16,7 @@ jobs:
           extensions: json, mbstring, sqlsrv, pdo_sqlsrv
 
       - name: Install dependencies
-        run: composer Install
+        run: composer install
 
       - name: test
         continue-on-error: true
