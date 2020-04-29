@@ -2,52 +2,66 @@ name: Deploy workflow
 on: [push, pull_request]
 jobs:
   tests:
-    name: Setup PHP, UNIT TESTS, SQL SERVER & TEST SQL
+    name: Setup System
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "7.3"
-          tools: phpunit, phpstan
-          extensions: json, mbstring, sqlsrv, pdo_sqlsrv, xdebug
+      # - name: Setup PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: "7.3"
+      #     tools: phpunit, phpstan
+      #     extensions: json, mbstring, sqlsrv, pdo_sqlsrv, xdebug
 
-      - name: Setup DB
+      # - name: Install dependencies
+      #   run: composer install
+
+      # - name: Unit test
+      #   continue-on-error: true
+      #   env:
+      #     DB_DSN: 'sqlserver://@(localdb)\MSSQLLocalDB/TestingCICD'
+      #   run: |
+      #     phpunit --coverage-text
+
+      # - name: Static Analysis
+      #   continue-on-error: true
+      #   run: |
+      #     phpstan analyse --no-progress app
+
+      # - name: Setup DB
+      #   run: |
+      #     SqlLocalDB create MSSQLLocalDB
+      #     SqlLocalDB start MSSQLLocalDB
+      #     SqlLocalDB info MSSQLLocalDB                    
+      #     sqlcmd -S "(localdb)\MSSQLLocalDB" -i database.sql          
+      #     sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Select * from [TestingCICD].[dbo].[items];"
+
+      - name: Setup IIS
+        shell: pwsh
         run: |
-          SqlLocalDB create MSSQLLocalDB
-          SqlLocalDB start MSSQLLocalDB
-          SqlLocalDB info MSSQLLocalDB                    
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -i database.sql          
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Select * from [TestingCICD].[dbo].[items];"
+            If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+            {
+              Echo "This script needs to be run As Admin"
+              Break
+            }
+            else{
+              Echo "Admin mode enabled by default"
+              Break
+            }
 
-      - name: Install dependencies
-        run: composer install
-
-      - name: Unit test
-        continue-on-error: true
-        env:
-          DB_DSN: 'sqlserver://@(localdb)\MSSQLLocalDB/TestingCICD'
-        run: |
-          phpunit --coverage-text
-
-      - name: Static Analysis
-        continue-on-error: true
-        run: |
-          phpstan analyse --no-progress app
-  deploy:
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
-      - name: Deploy files
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ SECRETS.host }}
-          username: ${{ SECRETS.username }}
-          key: ${{ SECRETS.sshkey }}
-          script: |
-            cd /var/www/sqlapp
-            sudo git pull -f https://Bharani-Schawk:${{ SECRETS.GITHUB_TOKEN }}@github.com/Bharani-Schawk/php-7-ms-sql-server.git HEAD:master
-            sudo git log
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: tests
+  #   steps:
+  #     - name: Deploy files
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ SECRETS.host }}
+  #         username: ${{ SECRETS.username }}
+  #         key: ${{ SECRETS.sshkey }}
+  #         script: |
+  #           cd /var/www/sqlapp
+  #           sudo git pull -f https://Bharani-Schawk:${{ SECRETS.GITHUB_TOKEN }}@github.com/Bharani-Schawk/php-7-ms-sql-server.git HEAD:master
+  #           sudo git log
