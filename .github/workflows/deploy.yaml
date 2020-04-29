@@ -41,15 +41,17 @@ jobs:
       - name: Setup IIS
         shell: pwsh
         run: |
-            If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-            {
-              Echo "This script needs to be run As Admin"
-              Break
-            }
-            else{
-              Echo "Admin mode enabled by default"
-              Break
-            }
+          Get-Website
+          Invoke-WebRequest localhost
+            # If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+            # {
+            #   Echo "This script needs to be run As Admin"
+            #   Break
+            # }
+            # else{
+            #   Echo "Admin mode enabled by default"
+            #   Break
+            # }
 
   # deploy:
   #   runs-on: ubuntu-latest
