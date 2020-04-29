@@ -41,7 +41,7 @@ jobs:
       - name: Setup IIS
         shell: pwsh
         run: |
-          Get-Website
+          Get-ChildItem C:\inetpub\wwwroot
           Invoke-WebRequest localhost
             # If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
             # {
