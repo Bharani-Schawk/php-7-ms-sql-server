@@ -38,20 +38,28 @@ jobs:
       #     sqlcmd -S "(localdb)\MSSQLLocalDB" -i database.sql          
       #     sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "Select * from [TestingCICD].[dbo].[items];"
 
-      - name: Setup IIS
+      - name: Check IIS     # By Default IIS 10 setup is available in Windows 2019 VM
         shell: pwsh
         run: |
-          Get-ChildItem C:\inetpub\wwwroot
-          Invoke-WebRequest localhost
-            # If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-            # {
-            #   Echo "This script needs to be run As Admin"
-            #   Break
-            # }
-            # else{
-            #   Echo "Admin mode enabled by default"
-            #   Break
-            # }
+            Get-ChildItem C:\inetpub\wwwroot
+          # Invoke-WebRequest localhost
+          # If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+          # {
+          #   Echo "This script needs to be run As Admin"
+          #   Break
+          # }
+          # else{
+          #   Echo "Admin mode enabled by default"
+          #   Break
+          # }
+
+          # Start-Process -FilePath powershell.exe -ArgumentList {
+          # If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+          # {
+          #   Echo "This script needs to be run As Admin"
+          #   Break
+          # }
+          # } -verb RunAs
 
   # deploy:
   #   runs-on: ubuntu-latest
