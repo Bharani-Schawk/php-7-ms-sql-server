@@ -1,4 +1,4 @@
-name: check Output
+name: build
 on: push
 jobs:
   job1:
