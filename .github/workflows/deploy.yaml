@@ -1,5 +1,5 @@
 name: Deploy workflow
-on: [pull_request]
+on: [push]
 jobs:
   tests:
     name: Setup System
